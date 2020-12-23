@@ -1,6 +1,6 @@
 <template>
   <div>
-     <div v-if="this.activity != ''">
+     <div v-if="this.activity != null">
       <h1> {{activity.activity}} </h1>
       <h2> Accessibility </h2>
       <input disabled type="range" min="0" max="1" step="0.01" class="customSlider" v-model="activity.accessibility">
@@ -17,7 +17,16 @@
         <img src="@/assets/triple.png">
       </div>
       <h2> Price </h2>
-       <input disabled type="range" min="0" max="1"  step="0.01" class="customSlider" v-model="activity.price">
+      <div class="ImageRating">
+      <image-rating 
+        :read-only=true 
+        :show-rating=false 
+        :increment= 0.5
+        :item-size= 40
+        v-model="activity.price" 
+        v-bind:src="require(`../assets/coins.png`)">
+      </image-rating>
+       </div>
 
        <hr>
     </div> 
@@ -31,21 +40,21 @@
 
 import axios from 'axios';
 import {Component, Vue } from 'vue-property-decorator';
-
+const {ImageRating} = require( 'vue-rate-it');
 
 @Component({
   components: {
-    
+    ImageRating
   },
 })
 export default class MainMenu extends Vue{
-    public activity: String = "";
-  
+  public activity: any = null;
 
   public getActivity(): void{
         axios.get('http://www.boredapi.com/api/activity/')
         .then(res =>{
           this.activity = res.data;
+          this.activity.price = (this.activity.price*5)
 
         })
         .catch(err => console.log(err));
@@ -109,6 +118,7 @@ button {
    border-radius: 25px;
    
 }
-
-
+.ImageRating{
+  display: inline-block;
+}
 </style>

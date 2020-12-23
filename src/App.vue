@@ -4,10 +4,10 @@
      <h1>The Boring App</h1>
     <h2>Got nothing ToDo? We got you!</h2>
     <hr>
-
+    
     <component v-bind:is="component"/>
  
-    <img @click="getHelp" class="helpImage" alt="Help logo" src="@/assets/help.jpg">
+    <img @click="getHelp" class="helpPageImage" alt="Help logo" v-bind:src="require(`../src/assets/${this.imageSource}`)"/>
 
   </div>
 </template>
@@ -26,15 +26,19 @@ import HelpMenu from './components/HelpMenu.vue';
 
 export default class App extends Vue {
   public component :any = "MainMenu"
-  public imageSource: String = "@/assets/help.jpg"
+  public imageSource: String = "help.jpg"
+
+  
 
   public getHelp():void{
       if(this.component === HelpMenu){
+        this.imageSource = "help.jpg"
         this.component = MainMenu;
-        this.imageSource = "@/assets/help.jpg"
+        
       }else{
+        this.imageSource = "close.png"
         this.component = HelpMenu;
-          this.imageSource = "@/assets/close.png"
+          
       }
       
   }
@@ -53,8 +57,10 @@ export default class App extends Vue {
 img{
   width: 20%;
 }
-.helpImage{
+.helpPageImage{
+  margin-top: 1%;
   width: 40px;
+  height: 40px;
 }
 
 h1{
