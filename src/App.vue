@@ -6,11 +6,11 @@
     <hr>
     <div v-if="this.component == 'HelpMenu'">
       <HelpMenu @newActivity="updateActivity"/>
-      <MainOverview :activity="this.activity"/>
+     
     </div>
-
+        <MainOverview :activity="this.activity"/>
      <div v-if="this.component == 'MainOverview'"> 
-      <MainOverview :activity="this.activity"/>
+      
         <button @click="getActivity"> Get random activity </button>
      </div>
     <br/>
@@ -33,7 +33,7 @@ import axios from 'axios';
 })
 
 export default class App extends Vue {
-  public component :any = "MainOverview"
+  public component : String = "MainOverview"
   public imageSource: String = "help.jpg"
   public activity: any = null;
 
@@ -87,6 +87,11 @@ button {
   font-size: 15px;
   
 }
+
+button:hover {
+  cursor: pointer;
+}
+
 img{
   height: 10%;
   width: 20%;
@@ -95,6 +100,10 @@ img{
   margin-top: 1%;
   width: 40px;
   height: 40px;
+}
+
+.helpPageImage:hover {
+  cursor: pointer;
 }
 
 h1{

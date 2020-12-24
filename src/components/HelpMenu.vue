@@ -124,7 +124,9 @@ h3{
    margin-bottom: 0;
    color: #b13535;  
 }
-
+select:hover{
+   cursor: pointer;
+}
 .activityButton {
   height: 50px;
   width: 200px;
@@ -135,6 +137,9 @@ h3{
   background:  #294ca4;
   color: white;
   font-size: 15px;
+}
+.activityButton:hover{
+  cursor: pointer;
 }
 .helpImage{
   height: 20px;
