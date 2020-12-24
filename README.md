@@ -22,6 +22,6 @@ Or make a production build by running:
 
 
 ## Libraries
-vue-rate-it https://github.com/craigh411/vue-rate-it
-vue-slider-component https://github.com/NightCatSama/vue-slider-component
+vue-rate-it https://github.com/craigh411/vue-rate-it \
+vue-slider-component https://github.com/NightCatSama/vue-slider-component \
 v-tooltip https://github.com/Akryum/v-tooltip
