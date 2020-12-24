@@ -18,37 +18,8 @@
     <h3> {{errorMessage}} </h3>
   <br/>
     <button class="activityButton" @click="getActivity"> Get activity </button>
-  <br/>
+
   <hr>
-    <div v-if="this.activity != null">
-      <h1> {{activity.activity}} </h1>
-      <h2> Accessibility </h2>
-        <input disabled type="range" min="0" max="1" step="0.01" class="customSlider" v-model="activity.accessibility">
-      <h2> Type </h2>
-        <label> {{activity.type}} </label>
-      <h2> Number of participants </h2>
-        <div v-if="activity.participants < 2">
-          <img src="@/assets/single.png">
-        </div>
-      <div v-else-if="activity.participants > 1 && activity.participants < 5">
-        <img src="@/assets/double.png">
-      </div>    
-      <div v-else>
-        <img src="@/assets/triple.png">
-      </div>
-      <h2> Price </h2>
-      <div class="ImageRating">
-        <image-rating 
-          :read-only=true 
-          :show-rating=false 
-          :increment= 0.5
-          :item-size= 40
-          v-model="activity.price" 
-          v-bind:src="require(`../assets/coins.png`)">
-        </image-rating>
-      </div>
-      <hr>
-    </div> 
   </div>
 </template>
 
@@ -77,9 +48,8 @@ export default class HelpMenu extends Vue{
     public selectedType: String = '';
     public numberOfParticipants: Number = 1;
     public accessibilityRange: any = [0,100];
-    public errorMessage: String = '';
     public priceRange: any = [0, 100]
-    public value: number = 1;
+    public errorMessage: String = '';
     public typeTip: String = 'The type of the activity';
     public participantsTip: String = 'The number of people that this activity could involve'; 
     public accessibilityTip: String = 'A factor describing how possible an event is to do with zero being the most accessible';
@@ -91,14 +61,14 @@ export default class HelpMenu extends Vue{
         var request ='';
 
         if(this.selectedType != ''){
-            request += 'type='+this.selectedType+'&';
+          request += 'type='+this.selectedType+'&';
         }
-        request += 'participants='+this.numberOfParticipants +'&';
+          request += 'participants='+this.numberOfParticipants +'&';
 
         if(this.accessibilityRange[0] == this.accessibilityRange[1]){
-           request += 'accessibility='+this.accessibilityRange[0] + '&';
+          request += 'accessibility='+this.accessibilityRange[0] + '&';
         }else{
-           request += 'minaccessibility='+(this.accessibilityRange[0]/100) + '&maxaccessibility=' + (this.accessibilityRange[1]/100)+ '&';
+          request += 'minaccessibility='+(this.accessibilityRange[0]/100) + '&maxaccessibility=' + (this.accessibilityRange[1]/100)+ '&';
         }
         if (this.priceRange[0] == this.priceRange[1]){
           request += 'price='+ (this.priceRange[0]/100)
@@ -111,9 +81,15 @@ export default class HelpMenu extends Vue{
             if (res.data.error != null){
                 this.errorMessage = res.data.error;
                 console.log(res.data.error);
+                this.activity = null;
+                this.$emit("newActivity", this.activity);
+                  
             }else{
                 this.activity = res.data;
-            }
+                this.activity.price = (this.activity.price*5)
+                this.$emit("newActivity", this.activity);
+                this.activity = null;
+           }
           
 
             
@@ -130,9 +106,8 @@ export default class HelpMenu extends Vue{
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style >
 
+<style >
 h1 {
  font-size: 30px;
   color: #004383;
@@ -161,27 +136,8 @@ h3{
   color: white;
   font-size: 15px;
 }
-img{
-  height: 75px;
-}
 .helpImage{
   height: 20px;
-}
-.customSlider{
-   -webkit-appearance: none;
-  background: linear-gradient(to right, lightblue, rgb(94, 231, 224), blue);
-   border-radius: 25px;
-   outline: 0;
-}
-
-.customSlider::-webkit-slider-thumb{
- -webkit-appearance: none;
-  appearance: none;
-  width: 10px;
-  height: 15px;
-  background:  #004383;
-   border-radius: 25px;
-   
 }
 .vue-slider{
     margin: auto;

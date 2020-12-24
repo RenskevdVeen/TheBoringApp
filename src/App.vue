@@ -4,40 +4,61 @@
      <h1>The Boring App</h1>
     <h2>Got nothing ToDo? We got you!</h2>
     <hr>
-    
-    <component v-bind:is="component"/>
- 
-    <img @click="getHelp" class="helpPageImage" alt="Help logo" v-bind:src="require(`../src/assets/${this.imageSource}`)"/>
+    <div v-if="this.component == 'HelpMenu'">
+      <HelpMenu @newActivity="updateActivity"/>
+      <MainOverview :activity="this.activity"/>
+    </div>
+
+     <div v-if="this.component == 'MainOverview'"> 
+      <MainOverview :activity="this.activity"/>
+        <button @click="getActivity"> Get random activity </button>
+     </div>
+    <br/>
+    <img @click="getHelpMenu" class="helpPageImage" alt="Help logo" v-bind:src="require(`../src/assets/${this.imageSource}`)"/>
 
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import MainMenu from './components/MainMenu.vue';
+import MainOverview from './components/MainOverview.vue';
 import HelpMenu from './components/HelpMenu.vue';
+import axios from 'axios';
 
 @Component({
   components: {
-    MainMenu,
+    MainOverview,
     HelpMenu,
   },
 })
 
 export default class App extends Vue {
-  public component :any = "MainMenu"
+  public component :any = "MainOverview"
   public imageSource: String = "help.jpg"
+  public activity: any = null;
 
-  
+  public updateActivity(activity:any){
+    this.activity = activity
+  }
 
-  public getHelp():void{
-      if(this.component === HelpMenu){
+  public getActivity(): void{
+        axios.get('http://www.boredapi.com/api/activity/')
+        .then(res =>{
+          this.activity = res.data;
+          this.activity.price = (this.activity.price*5)
+        })
+        .catch(err => console.log(err));
+  }
+
+  public getHelpMenu():void{
+    this.activity = null;
+      if(this.component === "HelpMenu"){
         this.imageSource = "help.jpg"
-        this.component = MainMenu;
+        this.component = "MainOverview";
         
       }else{
         this.imageSource = "close.png"
-        this.component = HelpMenu;
+        this.component = "HelpMenu";
           
       }
       
@@ -54,7 +75,20 @@ export default class App extends Vue {
   color: #2c3e50;
   
 }
+button {
+  height: 50px;
+  width: 200px;
+    border-radius: 25px;
+   border-radius: 25px;
+   border: 2px solid  #004383;
+   outline: 0;
+  background:  #294ca4;
+  color: white;
+  font-size: 15px;
+  
+}
 img{
+  height: 10%;
   width: 20%;
 }
 .helpPageImage{
